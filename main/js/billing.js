@@ -7,8 +7,9 @@ export function loadBilling() {
 
   const renderBilling = () => {
     const cartHtml = cart.map((item, i) => `
-      <div class="card">
-        <strong>${item.name}</strong> x ${item.qty} - Rs.${item.price * item.qty}
+      <div class="billingCardItem card">
+        <strong>${item.name}</strong>
+        <span>Qty: ${item.qty} - Rs.${(item.price * item.qty).toFixed(2)}</span>
         <button onclick="removeFromCart(${i})">Remove</button>
       </div>
     `).join('');
@@ -16,64 +17,57 @@ export function loadBilling() {
     const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
     document.getElementById('billingContent').innerHTML = `
-      ${cartHtml || "<p>No items in cart.</p>"}
-      <h3>Total: Rs.${total.toFixed(2)}</h3>
-      <button onclick="generateInvoiceImage()">Generate Invoice</button>
+      <div class="billingItemsGrid">
+        ${cartHtml || "<p>No items in cart.</p>"}
+      </div>
+      <div class="billingSummary">
+        <h3>Total: Rs.${total.toFixed(2)}</h3>
+        <button onclick="generateInvoiceImage()">Generate Invoice</button>
+      </div>
     `;
   };
 
+  // Main Billing UI
   document.getElementById('mainContent').innerHTML = `
-    <div class="card">
-      <h2>Billing System</h2>
+    <div id="billingContainer">
+      <h1>Billing System</h1>
 
-      <select id="productSelect">
-        <option value="">Select Product</option>
-        ${inventory.map((item, i) => `<option value="${i}">${item.name} (Rs.${item.price})</option>`).join('')}
-      </select>
-      <input type="number" id="productQty" placeholder="Qty" min="1" />
-      <button onclick="addToCart()">Add to Cart</button>
+      <div class="billingCardItem">
+        <select id="productSelect">
+          <option value="">Select Product</option>
+          ${inventory.map((item, i) => `<option value="${i}">${item.name} (Rs.${item.price})</option>`).join('')}
+        </select>
+        <input type="number" id="productQty" placeholder="Qty" min="1" />
+        <button id="addToCartBtn">Add to Cart</button>
+      </div>
+
       <div id="billingContent"></div>
     </div>
   `;
 
-  window.addToCart = () => {
-    const idx = productSelect.value;
-    const qty = Number(productQty.value);
+  // Event Handlers
+  document.getElementById('addToCartBtn').addEventListener('click', () => {
+    const idx = document.getElementById('productSelect').value;
+    const qty = Number(document.getElementById('productQty').value);
+
     if (idx === "" || qty <= 0) return showToast('Invalid item or quantity', 'error');
+
     const product = inventory[idx];
     cart.push({ ...product, qty });
     showToast('Added to cart', 'success');
     renderBilling();
-  };
+  });
 
-  window.removeFromCart = (i) => {
-    cart.splice(i, 1);
+  // Remove item from cart
+  window.removeFromCart = (index) => {
+    cart.splice(index, 1);
     renderBilling();
   };
 
+  // Generate Invoice as Image
   window.generateInvoiceImage = () => {
-    import('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js')
-      .then(html2canvas => {
-        // Select the container for the invoice (replace `#invoiceContainer` with your actual container)
-        const invoiceContent = $('.card')[0]; 
-  
-        html2canvas(invoiceContent).then(canvas => {
-          // Create an image URL from the canvas
-          const imageUrl = canvas.toDataURL('image/png');
-  
-          // Create a temporary link element to trigger the download
-          const link = document.createElement('a');
-          link.href = imageUrl;
-          link.download = 'invoice.png';  // Name of the image file to download
-          link.click();  // Trigger the download
-        });
-      })
-      .catch(error => {
-        console.error('Error generating image:', error);
-      });
-  };
-  
+    document.getElementById('mainContent').innerHTML = `
+    <h1>Sale completed</h1>
+  `;
 }
-
-
-// bills
+}

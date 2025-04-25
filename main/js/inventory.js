@@ -32,13 +32,16 @@ export function loadInventory() {
   // Renders all items as cards in row format
   const renderList = () => {
     const listHtml = items.map((item, index) => `
-      <div class="card" style="min-width: 200px; max-width: 220px; flex: 1;">
+      <div class="card inventoryCard" style="min-width: 200px; max-width: 220px; flex: 1;">
         <h3>${item.name}</h3>
         <p>Quantity: ${item.qty}</p>
         <p>Price: $${item.price}</p>
         <p>Category: ${item.category}</p>
-        <button onclick="editProduct(${index})">Edit</button>
-        <button onclick="deleteProduct(${index})">Delete</button>
+        <div class = "btns">
+         <button onclick="editProduct(${index})">Edit</button>
+         <button onclick="deleteProduct(${index})">Delete</button>
+        </div>
+       
       </div>
     `).join('');
     document.getElementById('inventoryList').innerHTML = listHtml;
