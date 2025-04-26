@@ -2,7 +2,7 @@ import { loadInventory } from './inventory.js';
 import { loadBilling } from './billing.js';
 import { loadReports } from './reports.js';
 import { loadFeedback } from './feedback.js';
- 
+import { loadAlerts, addAlertStyles } from './lowAlerts.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('homeTab').addEventListener('click', () => {
@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('billingTab').addEventListener('click', loadBilling);
   document.getElementById('reportsTab').addEventListener('click', loadReports);
   document.getElementById('feedbackTab').addEventListener('click', loadFeedback);
+  document.getElementById('alertsTab').addEventListener('click', loadAlerts);
   
   document.getElementById('homeTab').click();
 });
