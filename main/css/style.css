@@ -99,7 +99,7 @@ main {
     margin-left: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     width: auto; /* Automatically adjust the width based on content */
-    min-width: fit-content; /* Set a minimum width if needed */
+    min-width: auto; /* Set a minimum width if needed */
     max-width: none; /* Remove fixed max-width */
   }
   .card {
@@ -291,7 +291,7 @@ main {
     margin-left: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     width: auto; /* Automatically adjust the width based on content */
-    min-width: fit-content; /* Set a minimum width if needed */
+    min-width: auto; /* Set a minimum width if needed */
     max-width: none; /* Remove fixed max-width */
   }
   .billingCard {
