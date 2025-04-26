@@ -50,7 +50,7 @@ export function loadFeedback() {
       toast.className = "show";
       setTimeout(() => {
         toast.className = toast.className.replace("show", "");
-      }, 1000);
+      }, 3000);
     });
   }
   
