@@ -1,5 +1,7 @@
 import { loadInventory } from './inventory.js';
 import { loadBilling } from './billing.js';
+import { loadFeedback } from './feedback.js';
+ 
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('homeTab').addEventListener('click', () => {
@@ -13,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('inventoryTab').addEventListener('click', loadInventory);
   document.getElementById('billingTab').addEventListener('click', loadBilling);
+  document.getElementById('feedbackTab').addEventListener('click', loadFeedback);
   
 
   document.getElementById('homeTab').click();
