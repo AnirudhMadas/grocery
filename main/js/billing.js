@@ -1,5 +1,6 @@
 import { getInventory } from './storage.js';
 import { showToast } from './alerts.js';
+import { recordSale } from './reports.js';
 
 export function loadBilling() {
   const inventory = getInventory();
@@ -66,8 +67,11 @@ export function loadBilling() {
 
   // Generate Invoice as Image
   window.generateInvoiceImage = () => {
+    recordSale(cart);
     document.getElementById('mainContent').innerHTML = `
-    <h1>Sale completed</h1>
-  `;
+      <h1>Sale completed</h1>
+    `;
+  };
+
 }
-}
+
