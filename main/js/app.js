@@ -1,6 +1,11 @@
 import { loadInventory } from './inventory.js';
 import { loadBilling } from './billing.js';
+<<<<<<< HEAD
 import { loadReports } from './reports.js';
+=======
+import { loadFeedback } from './feedback.js';
+ 
+>>>>>>> 836a7021d1eb6fa271549548f855a343c1ecd02e
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('homeTab').addEventListener('click', () => {
@@ -14,8 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('inventoryTab').addEventListener('click', loadInventory);
   document.getElementById('billingTab').addEventListener('click', loadBilling);
+<<<<<<< HEAD
   document.getElementById('reportsTab').addEventListener('click', loadReports);
 
+=======
+  document.getElementById('feedbackTab').addEventListener('click', loadFeedback);
+  
+>>>>>>> 836a7021d1eb6fa271549548f855a343c1ecd02e
 
   document.getElementById('homeTab').click();
 });
