@@ -1,4 +1,4 @@
-import { getInventory } from './storage.js';
+import { getInventory, saveInventory } from './storage.js';
 import { showToast } from './alerts.js';
 import { recordSale } from './reports.js';
 
@@ -23,7 +23,7 @@ export function loadBilling() {
       </div>
       <div class="billingSummary">
         <h3>Total: Rs.${total.toFixed(2)}</h3>
-        <button onclick="generateInvoiceImage()">Generate Invoice</button>
+        <button onclick="completeSale()" ${cart.length === 0 ? 'disabled' : ''}>Generate Invoice</button>
       </div>
     `;
   };
@@ -31,12 +31,13 @@ export function loadBilling() {
   // Main Billing UI
   document.getElementById('mainContent').innerHTML = `
     <div id="billingContainer">
-      <h1>Billing System</h1>
+      
 
       <div class="billingCardItem">
+        <h1>Billing System</h1>
         <select id="productSelect">
           <option value="">Select Product</option>
-          ${inventory.map((item, i) => `<option value="${i}">${item.name} (Rs.${item.price})</option>`).join('')}
+          ${inventory.map((item, i) => `<option value="${i}" ${item.qty <= 0 ? 'disabled' : ''}>${item.name} (Rs.${item.price}) - ${item.qty} in stock</option>`).join('')}
         </select>
         <input type="number" id="productQty" placeholder="Qty" min="1" />
         <button id="addToCartBtn">Add to Cart</button>
@@ -54,7 +55,13 @@ export function loadBilling() {
     if (idx === "" || qty <= 0) return showToast('Invalid item or quantity', 'error');
 
     const product = inventory[idx];
-    cart.push({ ...product, qty });
+    
+    // Check if there's enough stock
+    if (qty > product.qty) {
+      return showToast(`Only ${product.qty} items available in stock`, 'error');
+    }
+
+    cart.push({ ...product, qty, inventoryIndex: idx });
     showToast('Added to cart', 'success');
     renderBilling();
   });
@@ -65,13 +72,58 @@ export function loadBilling() {
     renderBilling();
   };
 
-  // Generate Invoice as Image
-  window.generateInvoiceImage = () => {
+  // Complete sale and generate invoice
+  window.completeSale = () => {
+    if (cart.length === 0) {
+      showToast('Cart is empty', 'error');
+      return;
+    }
+
+    // Get fresh inventory data
+    const currentInventory = getInventory();
+    
+    // Check stock availability again before finalizing
+    let insufficientStock = false;
+    
+    cart.forEach(item => {
+      const inventoryItem = currentInventory[item.inventoryIndex];
+      if (inventoryItem.qty < item.qty) {
+        showToast(`Not enough ${item.name} in stock. Available: ${inventoryItem.qty}`, 'error');
+        insufficientStock = true;
+      }
+    });
+    
+    if (insufficientStock) return;
+    
+    // Update inventory quantities
+    cart.forEach(item => {
+      currentInventory[item.inventoryIndex].qty -= item.qty;
+    });
+    
+    // Save updated inventory
+    saveInventory(currentInventory);
+    
+    // Record the sale
     recordSale(cart);
+    
+    // Show success message
+    showToast('Sale completed and inventory updated', 'success');
+    
+    // Empty cart and display completion message
+    cart = [];
     document.getElementById('mainContent').innerHTML = `
-      <h1>Sale completed</h1>
+      <div class="card">
+        <h1>Sale completed</h1>
+        <p>The inventory has been updated successfully.</p>
+        <button class="btn btn-primary" id="newSaleBtn">New Sale</button>
+      </div>
     `;
+    
+    document.getElementById('newSaleBtn').addEventListener('click', () => {
+      loadBilling();
+    });
   };
 
+  // Initialize the UI
+  renderBilling();
 }
-
