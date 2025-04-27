@@ -8,43 +8,53 @@ export function loadBilling() {
 
   const renderBilling = () => {
     const cartHtml = cart.map((item, i) => `
-      <div class="billingCardItem card">
-        <strong>${item.name}</strong>
-        <span>Qty: ${item.qty} - Rs.${(item.price * item.qty).toFixed(2)}</span>
-        <button onclick="removeFromCart(${i})">Remove</button>
+      <div class="billing-card-item">
+        <div class="item-details">
+          <img src="https://via.placeholder.com/50" alt="${item.name}" class="item-image" />
+          <div>
+            <strong>${item.name}</strong>
+            <p>Qty: ${item.qty} - Rs.${(item.price * item.qty).toFixed(2)}</p>
+          </div>
+        </div>
+        <button class="remove-btn" onclick="removeFromCart(${i})">Remove</button>
       </div>
     `).join('');
 
     const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
     document.getElementById('billingContent').innerHTML = `
-      <div class="billingItemsGrid">
-        ${cartHtml || "<p>No items in cart.</p>"}
+      <div class="billing-items-grid">
+        ${cartHtml || "<p class='empty-cart'>No items in cart.</p>"}
       </div>
-      <div class="billingSummary">
-        <h3>Total: Rs.${total.toFixed(2)}</h3>
-        <button onclick="completeSale()" ${cart.length === 0 ? 'disabled' : ''}>Generate Invoice</button>
+      <div class="billing-summary">
+        <h3>Total: Rs.<span>${total.toFixed(2)}</span></h3>
+        <button class="generate-invoice-btn" ${cart.length === 0 ? 'disabled' : ''} onclick="completeSale()">Generate Invoice</button>
       </div>
     `;
   };
 
   // Main Billing UI
   document.getElementById('mainContent').innerHTML = `
-    <div id="billingContainer">
-      
-
-      <div class="billingCardItem">
-        <h1>Billing System</h1>
-        <select id="productSelect">
-          <option value="">Select Product</option>
-          ${inventory.map((item, i) => `<option value="${i}" ${item.qty <= 0 ? 'disabled' : ''}>${item.name} (Rs.${item.price}) - ${item.qty} in stock</option>`).join('')}
-        </select>
-        <input type="number" id="productQty" placeholder="Qty" min="1" />
-        <button id="addToCartBtn">Add to Cart</button>
+    <section class="billing-section">
+      <div class="billing-card">
+        <h2 class="billing-title">Billing System</h2>
+        <div class="billing-inputs">
+          <div class="form-group">
+            <label for="productSelect">Select Product</label>
+            <select id="productSelect" name="productSelect">
+              <option value="">Select Product</option>
+              ${inventory.map((item, i) => `<option value="${i}" ${item.qty <= 0 ? 'disabled' : ''}>${item.name} (Rs.${item.price}) - ${item.qty} in stock</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="productQty">Qty</label>
+            <input type="number" id="productQty" name="productQty" placeholder="Qty" min="1" value="1" />
+          </div>
+          <button class="add-to-cart-btn" id="addToCartBtn">Add to Cart</button>
+        </div>
+        <div id="billingContent" class="billing-content"></div>
       </div>
-
-      <div id="billingContent"></div>
-    </div>
+    </section>
   `;
 
   // Event Handlers

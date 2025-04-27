@@ -1,4 +1,4 @@
-// feedback.js
+ 
 
 export function loadFeedback() {
     const mainContent = document.getElementById('mainContent');
