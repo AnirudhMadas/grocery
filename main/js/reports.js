@@ -13,6 +13,8 @@ export function loadReports() {
         <button class="btn btn-primary" id="exportCSVBtn">Download CSV</button>
         <button class="btn btn-secondary" id="exportTXTBtn">Download TXT</button>
         <button class="btn btn-secondary" id="exportJSONBtn">Download JSON</button>
+        <button class="btn btn-secondary" id="clearReportsBtn" style="margin-left: 10px; background-color: #f44336;">Clear Reports</button>
+ 
       </div>
 
       <table id="salesReportTable">
@@ -31,7 +33,14 @@ export function loadReports() {
       </table>
     </div>
   `;
-
+  document.getElementById('clearReportsBtn').addEventListener('click', () => {
+    if (confirm('Are you sure you want to clear all sales reports? This action cannot be undone.')) {
+      salesRecords = [];
+      localStorage.setItem('salesRecords', JSON.stringify(salesRecords));
+      document.querySelector('#salesReportTable tbody').innerHTML = renderReportRows(salesRecords);
+      showToast('Reports cleared successfully', 'success');
+    }
+  });
   document.getElementById('reportSearchInput').addEventListener('input', e => {
     const searchTerm = e.target.value.toLowerCase();
     const filtered = salesRecords.filter(item =>
@@ -123,3 +132,5 @@ export function recordSale(cartItems) {
   salesRecords.push(...newSales);
   localStorage.setItem('salesRecords', JSON.stringify(salesRecords));
 }
+
+import { showToast } from './alerts.js';

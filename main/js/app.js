@@ -3,6 +3,7 @@ import { loadBilling } from './billing.js';
 import { loadReports } from './reports.js';
 import { loadDownloads } from './downloadReports.js';
 import { loadFeedback } from './feedback.js';
+import { loadAlerts } from './lowAlerts.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('homeTab').addEventListener('click', () => {
@@ -151,14 +152,14 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('inventoryTab').addEventListener('click', loadInventory);
   document.getElementById('billingTab').addEventListener('click', loadBilling);
   document.getElementById('reportsTab').addEventListener('click', loadReports);
-  document.getElementById('downloadsTab').addEventListener('click', loadDownloads);
+  document.getElementById('alertsTab').addEventListener('click', loadAlerts);
   document.getElementById('feedbackTab').addEventListener('click', loadFeedback);
   document.getElementById('homeTab').click();
 });
 
 // Function to handle tab switching (to be used by cards, nav, and tabs)
 function switchTab(tabId) {
-  const tabs = ['homeTab', 'inventoryTab', 'billingTab', 'reportsTab', 'downloadsTab', 'feedbackTab', 'alertsTab'];
+  const tabs = ['homeTab', 'inventoryTab', 'billingTab', 'reportsTab', 'alertsTab', 'feedbackTab'];
   tabs.forEach((id) => {
     const tab = document.getElementById(id);
     if (tab) {
@@ -185,15 +186,11 @@ function switchTab(tabId) {
     case 'reportsTab':
       loadReports();
       break;
-    case 'downloadsTab':
-      loadDownloads();
+    case 'alertsTab':
+      loadAlerts();
       break;
     case 'feedbackTab':
       loadFeedback();
-      break;
-    case 'alertsTab':
-      // Add loadAlerts function if available
-      console.log('Alerts tab clicked, implement loadAlerts if needed');
       break;
     default:
       document.getElementById('homeTab').click();
