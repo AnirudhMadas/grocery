@@ -81,13 +81,14 @@ function redirectToAmazon(item) {
   const searchQuery = encodeURIComponent(`${item.name} ${item.category}`);
   
   // Construct Amazon search URL
-  const amazonUrl = `https://www.amazon.com/s?k=${searchQuery}`;
-  
+  //const amazonUrl = `https://www.bigbasket.com/s?k=${searchQuery}`;
+  const bigBasketUrl = `https://www.bigbasket.com/ps/?q=${searchQuery}`;
+
   // Show a toast notification
   showToast(`Redirecting to Amazon to purchase ${item.name}`, 'info');
   
   // Open Amazon in a new tab
-  window.open(amazonUrl, '_blank');
+  window.open(bigBasketUrl, '_blank');
 }
 
 // Add some CSS specific to the alerts page
