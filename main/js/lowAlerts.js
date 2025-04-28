@@ -68,7 +68,7 @@ function renderAlertItems(items, alertType) {
             <p>Price: Rs.${item.price}</p>
           </div>
           <div class="alert-item-actions">
-            <button class="btn btn-primary order-btn" data-id="${index}">Buy on Amazon</button>
+            <button class="btn btn-primary order-btn" data-id="${index}">Reorder</button>
           </div>
         </div>
       `).join('')}
@@ -80,8 +80,7 @@ function redirectToAmazon(item) {
   // Create search query from item name and category
   const searchQuery = encodeURIComponent(`${item.name} ${item.category}`);
   
-  // Construct Amazon search URL
-  //const amazonUrl = `https://www.bigbasket.com/s?k=${searchQuery}`;
+  // Construct Bigbasket search URL
   const bigBasketUrl = `https://www.bigbasket.com/ps/?q=${searchQuery}`;
 
   // Show a toast notification

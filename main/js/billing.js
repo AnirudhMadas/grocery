@@ -40,11 +40,11 @@ export function loadBilling() {
         <h2 class="billing-title">Billing System</h2>
         <div class="billing-inputs">
           <div class="form-group">
-            <label for="productSelect">Select Product</label>
-            <select id="productSelect" name="productSelect">
-              <option value="">Select Product</option>
-              ${inventory.map((item, i) => `<option value="${i}" ${item.qty <= 0 ? 'disabled' : ''}>${item.name} (Rs.${item.price}) - ${item.qty} in stock</option>`).join('')}
-            </select>
+            <div class="form-group">
+              <label for="productSearch">Search Product</label>
+              <input type="text" id="productSearch" name="productSearch" placeholder="Search for a product..." autocomplete="off" />
+              <div id="searchResults" class="search-results"></div>
+            </div>
           </div>
           <div class="form-group">
             <label for="productQty">Qty</label>
@@ -58,6 +58,57 @@ export function loadBilling() {
   `;
 
   // Event Handlers
+  let selectedProductIndex = null;
+
+  const searchInput = document.getElementById('productSearch');
+  const searchResults = document.getElementById('searchResults');
+
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.trim().toLowerCase();
+    searchResults.innerHTML = '';
+
+    if (query.length === 0) {
+      selectedProductIndex = null;
+      return;
+    }
+
+    const matches = inventory
+      .map((item, index) => ({ ...item, index }))
+      .filter(item => item.name.toLowerCase().includes(query) && item.qty > 0);
+
+    matches.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'search-result-item';
+      div.textContent = `${item.name} (Rs.${item.price}) - ${item.qty} in stock`;
+      div.addEventListener('click', () => {
+        searchInput.value = item.name;
+        selectedProductIndex = item.index;
+        searchResults.innerHTML = '';
+      });
+      searchResults.appendChild(div);
+    });
+  });
+
+  document.getElementById('addToCartBtn').addEventListener('click', () => {
+    const qty = Number(document.getElementById('productQty').value);
+
+    if (selectedProductIndex === null || qty <= 0) {
+      return showToast('Please select a valid product and quantity', 'error');
+    }
+
+    const product = inventory[selectedProductIndex];
+
+    if (qty > product.qty) {
+      return showToast(`Only ${product.qty} items available in stock`, 'error');
+    }
+
+    cart.push({ ...product, qty, inventoryIndex: selectedProductIndex });
+    showToast('Added to cart', 'success');
+    searchInput.value = '';
+    selectedProductIndex = null;
+    renderBilling();
+  });
+
   document.getElementById('addToCartBtn').addEventListener('click', () => {
     const idx = document.getElementById('productSelect').value;
     const qty = Number(document.getElementById('productQty').value);
