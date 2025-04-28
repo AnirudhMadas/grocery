@@ -10,7 +10,7 @@ export function loadBilling() {
     const cartHtml = cart.map((item, i) => `
       <div class="billing-card-item">
         <div class="item-details">
-          <img src="https://via.placeholder.com/50" alt="${item.name}" class="item-image" />
+          <img src="${item.imageUrl || 'https://via.placeholder.com/50'}" alt="${item.name}" class="item-image" />
           <div>
             <strong>${item.name}</strong>
             <p>Qty: ${item.qty} - Rs.${(item.price * item.qty).toFixed(2)}</p>
@@ -77,9 +77,13 @@ export function loadBilling() {
       .filter(item => item.name.toLowerCase().includes(query) && item.qty > 0);
 
     matches.forEach(item => {
+      const imageUrl = item.imageUrl || 'https://via.placeholder.com/30';
       const div = document.createElement('div');
       div.className = 'search-result-item';
-      div.textContent = `${item.name} (Rs.${item.price}) - ${item.qty} in stock`;
+      div.innerHTML = `
+        <img src="${imageUrl}" alt="${item.name}" style="width: 30px; height: 30px; object-fit: cover; margin-right: 10px;" />
+        <span>${item.name} (Rs.${item.price}) - ${item.qty} in stock</span>
+      `;
       div.addEventListener('click', () => {
         searchInput.value = item.name;
         selectedProductIndex = item.index;
@@ -106,24 +110,6 @@ export function loadBilling() {
     showToast('Added to cart', 'success');
     searchInput.value = '';
     selectedProductIndex = null;
-    renderBilling();
-  });
-
-  document.getElementById('addToCartBtn').addEventListener('click', () => {
-    const idx = document.getElementById('productSelect').value;
-    const qty = Number(document.getElementById('productQty').value);
-
-    if (idx === "" || qty <= 0) return showToast('Invalid item or quantity', 'error');
-
-    const product = inventory[idx];
-    
-    // Check if there's enough stock
-    if (qty > product.qty) {
-      return showToast(`Only ${product.qty} items available in stock`, 'error');
-    }
-
-    cart.push({ ...product, qty, inventoryIndex: idx });
-    showToast('Added to cart', 'success');
     renderBilling();
   });
 

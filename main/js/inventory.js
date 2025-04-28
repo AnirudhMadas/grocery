@@ -20,6 +20,8 @@ export function loadInventory() {
             <option value="Dairy">Dairy</option>
             <option value="Beverages">Beverages</option>
           </select>
+          <input type="text" id="pImage" placeholder="Image URL" />
+          <p class="form-hint">Leave blank to use default image</p>
           <button type="submit">Add Product</button>
         </form>
       </div>
@@ -47,8 +49,12 @@ export function loadInventory() {
         stockStatus = 'In Stock';
       }
       
+      // Use the product image or a placeholder
+      const imageUrl = item.imageUrl || 'https://via.placeholder.com/100';
+      
       return `
         <div class="card inventoryCard" style="min-width: 200px; max-width: 220px; flex: 1;">
+          <img src="${imageUrl}" alt="${item.name}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 10px;">
           <h3>${item.name}</h3>
           <p>Quantity: <span class="stock-level ${stockLevelClass}">${item.qty} (${stockStatus})</span></p>
           <p>Price: Rs.${item.price}</p>
@@ -71,6 +77,7 @@ export function loadInventory() {
     document.getElementById('pQty').value = item.qty;
     document.getElementById('pPrice').value = item.price;
     document.getElementById('pCat').value = item.category;
+    document.getElementById('pImage').value = item.imageUrl || '';
     
     // Change form behavior to update instead of add
     const form = document.getElementById('productForm');
@@ -104,7 +111,8 @@ export function loadInventory() {
       name: pName.value,
       qty: Number(pQty.value),
       price: Number(pPrice.value),
-      category: pCat.value
+      category: pCat.value,
+      imageUrl: pImage.value || '' // Store image URL
     };
     
     if (editIndex !== undefined) {
