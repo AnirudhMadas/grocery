@@ -168,7 +168,7 @@ export function loadInventory() {
       if (item.qty <= 0) {
         stockLevelClass = 'stock-low';
         stockStatus = 'Out of Stock';
-      } else if (item.qty < 5) {
+      } else if (item.qty < 10) {
         stockLevelClass = 'stock-medium';
         stockStatus = 'Low Stock';
       } else {
