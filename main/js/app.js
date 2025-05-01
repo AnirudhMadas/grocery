@@ -1,7 +1,6 @@
 import { loadInventory } from './inventory.js';
 import { loadBilling } from './billing.js';
 import { loadReports } from './reports.js';
-import { loadDownloads } from './downloadReports.js';
 import { loadFeedback } from './feedback.js';
 import { loadAlerts } from './lowAlerts.js';
 
