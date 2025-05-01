@@ -5,7 +5,7 @@ export function loadAlerts() {
   const inventory = getInventory();
   
   // Get low stock and out of stock items
-  const lowStockItems = inventory.filter(item => item.qty > 0 && item.qty < 5);
+  const lowStockItems = inventory.filter(item => item.qty > 0 && item.qty < 10);
   const outOfStockItems = inventory.filter(item => item.qty <= 0);
   
   document.getElementById('mainContent').innerHTML = `

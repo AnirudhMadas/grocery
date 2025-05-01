@@ -117,8 +117,8 @@ export function loadInventory() {
     // Apply stock filters
     filteredItems = filteredItems.filter(item => {
       if (item.qty <= 0 && showOutOfStock) return true;
-      if (item.qty > 0 && item.qty < 5 && showLowStock) return true;
-      if (item.qty >= 5 && showInStock) return true;
+      if (item.qty > 0 && item.qty < 10 && showLowStock) return true;
+      if (item.qty >= 10 && showInStock) return true;
       return false;
     });
     

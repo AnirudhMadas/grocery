@@ -945,7 +945,6 @@ button.btn {
   font-size: 1.2rem;
 }
 .search-results {
-  position: absolute;
   background: #fff;
   border: 1px solid #ccc;
   width: 100%;
